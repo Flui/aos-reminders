@@ -13,6 +13,24 @@ import { IStore } from 'types/store'
 import { reminders } from 'ducks/reminders'
 import { IReminder } from 'types/data'
 
+// if (process.env.NODE_ENV === 'development') {
+//   const whyDidYouRender = require('@welldone-software/why-did-you-render')
+//   whyDidYouRender(React)
+// }
+
+const RemindersList: React.FC<{ reminders: IReminder; isMobile: boolean }> = ({ reminders, isMobile }) => {
+  const whens = Object.keys(reminders)
+  return (
+    <>
+      {whens.map((when, i) => {
+        return (
+          <Reminder isMobile={isMobile} when={when} actions={reminders[when]} key={`${when}_${i}`} idx={i} />
+        )
+      })}
+    </>
+  )
+}
+
 interface IRemindersProps extends ICurrentArmy {
   allyArmies: TAllyArmies
   army: IArmy
@@ -83,7 +101,8 @@ const RemindersComponent = (props: IRemindersProps) => {
   return (
     <div className={`row mx-auto ${isGameMode ? `mt-0` : `mt-3`} d-flex justify-content-center`}>
       <div className="col col-sm-11 col-md-10 col-lg-10 col-xl-8 ReminderContainer">
-        {whens.map((when, i) => {
+        <RemindersList reminders={reminders} isMobile={isMobile} />
+        {/* {whens.map((when, i) => {
           return (
             <Reminder
               isMobile={isMobile}
@@ -93,11 +112,13 @@ const RemindersComponent = (props: IRemindersProps) => {
               idx={i}
             />
           )
-        })}
+        })} */}
       </div>
     </div>
   )
 }
+
+// RemindersComponent.whyDidYouRender = true
 
 const mapStateToProps = (state: IStore, ownProps) => ({
   ...ownProps,
